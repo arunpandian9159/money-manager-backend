@@ -38,6 +38,7 @@ const getTransactions = async (userId, queryParams) => {
     type,
     division,
     category,
+    accountId,
     startDate,
     endDate,
     search,
@@ -53,6 +54,7 @@ const getTransactions = async (userId, queryParams) => {
   if (type) filter.type = type;
   if (division) filter.division = division;
   if (category) filter.category = category;
+  if (accountId) filter.account = accountId;
 
   // Date range filter
   const dateFilter = parseDateRange(startDate, endDate);
