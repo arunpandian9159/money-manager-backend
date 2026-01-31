@@ -3,8 +3,8 @@
  * Prevents brute force attacks on authentication endpoints
  */
 
-const rateLimit = require('express-rate-limit');
-const { RATE_LIMIT } = require('../config/constants');
+const rateLimit = require("express-rate-limit");
+const { RATE_LIMIT } = require("../config/constants");
 
 /**
  * General API rate limiter
@@ -15,10 +15,10 @@ const apiLimiter = rateLimit({
   max: 100, // 100 requests per window
   message: {
     success: false,
-    message: 'Too many requests, please try again later'
+    message: "Too many requests, please try again later",
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 /**
@@ -31,11 +31,11 @@ const authLimiter = rateLimit({
   max: RATE_LIMIT.MAX_ATTEMPTS,
   message: {
     success: false,
-    message: 'Too many login attempts, please try again later'
+    message: "Too many login attempts, please try again later",
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skipSuccessfulRequests: false
+  skipSuccessfulRequests: false,
 });
 
 /**
@@ -47,15 +47,14 @@ const createAccountLimiter = rateLimit({
   max: 10, // 10 accounts per hour
   message: {
     success: false,
-    message: 'Too many accounts created, please try again later'
+    message: "Too many accounts created, please try again later",
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 module.exports = {
   apiLimiter,
   authLimiter,
-  createAccountLimiter
+  createAccountLimiter,
 };
-

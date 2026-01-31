@@ -3,8 +3,8 @@
  * Handles account management HTTP requests
  */
 
-const asyncHandler = require('../utils/asyncHandler');
-const accountService = require('../services/accountService');
+const asyncHandler = require("../utils/asyncHandler");
+const accountService = require("../services/accountService");
 
 /**
  * @desc    Create a new account
@@ -16,10 +16,10 @@ const createAccount = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    message: 'Account created successfully',
+    message: "Account created successfully",
     data: {
-      account
-    }
+      account,
+    },
   });
 });
 
@@ -36,8 +36,8 @@ const getAccounts = asyncHandler(async (req, res) => {
     success: true,
     data: {
       accounts,
-      count: accounts.length
-    }
+      count: accounts.length,
+    },
   });
 });
 
@@ -49,14 +49,14 @@ const getAccounts = asyncHandler(async (req, res) => {
 const getAccount = asyncHandler(async (req, res) => {
   const account = await accountService.getAccountById(
     req.user._id,
-    req.params.id
+    req.params.id,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      account
-    }
+      account,
+    },
   });
 });
 
@@ -69,15 +69,15 @@ const updateAccount = asyncHandler(async (req, res) => {
   const account = await accountService.updateAccount(
     req.user._id,
     req.params.id,
-    req.body
+    req.body,
   );
 
   res.status(200).json({
     success: true,
-    message: 'Account updated successfully',
+    message: "Account updated successfully",
     data: {
-      account
-    }
+      account,
+    },
   });
 });
 
@@ -91,7 +91,7 @@ const deleteAccount = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Account deleted successfully'
+    message: "Account deleted successfully",
   });
 });
 
@@ -107,13 +107,13 @@ const transfer = asyncHandler(async (req, res) => {
     req.user._id,
     fromAccountId,
     toAccountId,
-    parseFloat(amount)
+    parseFloat(amount),
   );
 
   res.status(200).json({
     success: true,
-    message: 'Transfer completed successfully',
-    data: result
+    message: "Transfer completed successfully",
+    data: result,
   });
 });
 
@@ -128,8 +128,8 @@ const getSummary = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      summary
-    }
+      summary,
+    },
   });
 });
 
@@ -140,6 +140,5 @@ module.exports = {
   updateAccount,
   deleteAccount,
   transfer,
-  getSummary
+  getSummary,
 };
-

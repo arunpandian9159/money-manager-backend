@@ -3,8 +3,8 @@
  * Handles transaction HTTP requests
  */
 
-const asyncHandler = require('../utils/asyncHandler');
-const transactionService = require('../services/transactionService');
+const asyncHandler = require("../utils/asyncHandler");
+const transactionService = require("../services/transactionService");
 
 /**
  * @desc    Create a new transaction
@@ -14,15 +14,15 @@ const transactionService = require('../services/transactionService');
 const createTransaction = asyncHandler(async (req, res) => {
   const transaction = await transactionService.createTransaction(
     req.user._id,
-    req.body
+    req.body,
   );
 
   res.status(201).json({
     success: true,
-    message: 'Transaction created successfully',
+    message: "Transaction created successfully",
     data: {
-      transaction
-    }
+      transaction,
+    },
   });
 });
 
@@ -35,15 +35,15 @@ const createTransaction = asyncHandler(async (req, res) => {
 const getTransactions = asyncHandler(async (req, res) => {
   const { transactions, pagination } = await transactionService.getTransactions(
     req.user._id,
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
       transactions,
-      pagination
-    }
+      pagination,
+    },
   });
 });
 
@@ -55,14 +55,14 @@ const getTransactions = asyncHandler(async (req, res) => {
 const getTransaction = asyncHandler(async (req, res) => {
   const transaction = await transactionService.getTransactionById(
     req.user._id,
-    req.params.id
+    req.params.id,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      transaction
-    }
+      transaction,
+    },
   });
 });
 
@@ -75,15 +75,15 @@ const updateTransaction = asyncHandler(async (req, res) => {
   const transaction = await transactionService.updateTransaction(
     req.user._id,
     req.params.id,
-    req.body
+    req.body,
   );
 
   res.status(200).json({
     success: true,
-    message: 'Transaction updated successfully',
+    message: "Transaction updated successfully",
     data: {
-      transaction
-    }
+      transaction,
+    },
   });
 });
 
@@ -97,7 +97,7 @@ const deleteTransaction = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Transaction deleted successfully'
+    message: "Transaction deleted successfully",
   });
 });
 
@@ -110,14 +110,14 @@ const deleteTransaction = asyncHandler(async (req, res) => {
 const getSummary = asyncHandler(async (req, res) => {
   const summary = await transactionService.getSummary(
     req.user._id.toString(),
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      summary
-    }
+      summary,
+    },
   });
 });
 
@@ -127,6 +127,5 @@ module.exports = {
   getTransaction,
   updateTransaction,
   deleteTransaction,
-  getSummary
+  getSummary,
 };
-

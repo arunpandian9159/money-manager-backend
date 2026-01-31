@@ -3,10 +3,14 @@
  * Business logic for transaction operations
  */
 
-const Transaction = require('../models/Transaction');
-const ApiError = require('../utils/ApiError');
-const { isWithinEditWindow, buildPagination, parseDateRange } = require('../utils/helpers');
-const { PAGINATION, EDIT_WINDOW_HOURS } = require('../config/constants');
+const Transaction = require("../models/Transaction");
+const ApiError = require("../utils/ApiError");
+const {
+  isWithinEditWindow,
+  buildPagination,
+  parseDateRange,
+} = require("../utils/helpers");
+const { PAGINATION, EDIT_WINDOW_HOURS } = require("../config/constants");
 
 /**
  * Create a new transaction
@@ -17,7 +21,7 @@ const { PAGINATION, EDIT_WINDOW_HOURS } = require('../config/constants');
 const createTransaction = async (userId, transactionData) => {
   const transaction = await Transaction.create({
     userId,
-    ...transactionData
+    ...transactionData,
   });
 
   return transaction;
@@ -39,8 +43,8 @@ const getTransactions = async (userId, queryParams) => {
     search,
     page = PAGINATION.DEFAULT_PAGE,
     limit = PAGINATION.DEFAULT_LIMIT,
-    sortBy = 'date',
-    sortOrder = 'desc'
+    sortBy = "date",
+    sortOrder = "desc",
   } = queryParams;
 
   // Build filter query
@@ -56,7 +60,7 @@ const getTransactions = async (userId, queryParams) => {
 
   // Search in description
   if (search) {
-    filter.description = { $regex: search, $options: 'i' };
+    filter.description = { $regex: search, $options: "i" };
   }
 
   // Calculate pagination
@@ -66,7 +70,7 @@ const getTransactions = async (userId, queryParams) => {
 
   // Build sort object
   const sort = {};
-  sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+  sort[sortBy] = sortOrder === "asc" ? 1 : -1;
 
   // Execute query
   const [transactions, total] = await Promise.all([
@@ -74,13 +78,13 @@ const getTransactions = async (userId, queryParams) => {
       .sort(sort)
       .skip(skip)
       .limit(limitNum)
-      .populate('accountId', 'name type'),
-    Transaction.countDocuments(filter)
+      .populate("accountId", "name type"),
+    Transaction.countDocuments(filter),
   ]);
 
   return {
     transactions,
-    pagination: buildPagination(pageNum, limitNum, total)
+    pagination: buildPagination(pageNum, limitNum, total),
   };
 };
 
@@ -93,11 +97,11 @@ const getTransactions = async (userId, queryParams) => {
 const getTransactionById = async (userId, transactionId) => {
   const transaction = await Transaction.findOne({
     _id: transactionId,
-    userId
-  }).populate('accountId', 'name type');
+    userId,
+  }).populate("accountId", "name type");
 
   if (!transaction) {
-    throw ApiError.notFound('Transaction not found');
+    throw ApiError.notFound("Transaction not found");
   }
 
   return transaction;
@@ -113,23 +117,31 @@ const getTransactionById = async (userId, transactionId) => {
 const updateTransaction = async (userId, transactionId, updateData) => {
   const transaction = await Transaction.findOne({
     _id: transactionId,
-    userId
+    userId,
   });
 
   if (!transaction) {
-    throw ApiError.notFound('Transaction not found');
+    throw ApiError.notFound("Transaction not found");
   }
 
   // Check 12-hour edit window
   if (!isWithinEditWindow(transaction.createdAt)) {
     throw ApiError.forbidden(
-      `Transactions can only be edited within ${EDIT_WINDOW_HOURS} hours of creation`
+      `Transactions can only be edited within ${EDIT_WINDOW_HOURS} hours of creation`,
     );
   }
 
   // Update allowed fields
-  const allowedUpdates = ['type', 'amount', 'category', 'division', 'description', 'date', 'accountId'];
-  allowedUpdates.forEach(field => {
+  const allowedUpdates = [
+    "type",
+    "amount",
+    "category",
+    "division",
+    "description",
+    "date",
+    "accountId",
+  ];
+  allowedUpdates.forEach((field) => {
     if (updateData[field] !== undefined) {
       transaction[field] = updateData[field];
     }
@@ -149,11 +161,11 @@ const updateTransaction = async (userId, transactionId, updateData) => {
 const deleteTransaction = async (userId, transactionId) => {
   const transaction = await Transaction.findOneAndDelete({
     _id: transactionId,
-    userId
+    userId,
   });
 
   if (!transaction) {
-    throw ApiError.notFound('Transaction not found');
+    throw ApiError.notFound("Transaction not found");
   }
 };
 
@@ -167,7 +179,9 @@ const getSummary = async (userId, queryParams) => {
   const { startDate, endDate } = queryParams;
 
   // Build match stage
-  const match = { userId: require('mongoose').Types.ObjectId.createFromHexString(userId) };
+  const match = {
+    userId: require("mongoose").Types.ObjectId.createFromHexString(userId),
+  };
   const dateFilter = parseDateRange(startDate, endDate);
   if (dateFilter) match.date = dateFilter;
 
@@ -177,17 +191,21 @@ const getSummary = async (userId, queryParams) => {
       $group: {
         _id: null,
         totalIncome: {
-          $sum: { $cond: [{ $eq: ['$type', 'income'] }, '$amount', 0] }
+          $sum: { $cond: [{ $eq: ["$type", "income"] }, "$amount", 0] },
         },
         totalExpenses: {
-          $sum: { $cond: [{ $eq: ['$type', 'expense'] }, '$amount', 0] }
+          $sum: { $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0] },
         },
-        transactionCount: { $sum: 1 }
-      }
-    }
+        transactionCount: { $sum: 1 },
+      },
+    },
   ]);
 
-  const result = summary[0] || { totalIncome: 0, totalExpenses: 0, transactionCount: 0 };
+  const result = summary[0] || {
+    totalIncome: 0,
+    totalExpenses: 0,
+    transactionCount: 0,
+  };
   result.netBalance = result.totalIncome - result.totalExpenses;
 
   return result;
@@ -199,6 +217,5 @@ module.exports = {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
-  getSummary
+  getSummary,
 };
-

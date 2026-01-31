@@ -3,9 +3,9 @@
  * Business logic for authentication operations
  */
 
-const User = require('../models/User');
-const ApiError = require('../utils/ApiError');
-const { sanitizeUser } = require('../utils/helpers');
+const User = require("../models/User");
+const ApiError = require("../utils/ApiError");
+const { sanitizeUser } = require("../utils/helpers");
 
 /**
  * Register a new user
@@ -18,7 +18,7 @@ const registerUser = async (userData) => {
   // Check if user already exists
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    throw ApiError.conflict('User with this email already exists');
+    throw ApiError.conflict("User with this email already exists");
   }
 
   // Create user
@@ -26,7 +26,7 @@ const registerUser = async (userData) => {
     email,
     firstName,
     lastName,
-    password
+    password,
   });
 
   // Generate token
@@ -34,7 +34,7 @@ const registerUser = async (userData) => {
 
   return {
     user: sanitizeUser(user),
-    token
+    token,
   };
 };
 
@@ -46,20 +46,20 @@ const registerUser = async (userData) => {
  */
 const loginUser = async (email, password) => {
   // Find user and include password for comparison
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    throw ApiError.unauthorized('Invalid email or password');
+    throw ApiError.unauthorized("Invalid email or password");
   }
 
   if (!user.isActive) {
-    throw ApiError.unauthorized('Account is deactivated');
+    throw ApiError.unauthorized("Account is deactivated");
   }
 
   // Check password
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
-    throw ApiError.unauthorized('Invalid email or password');
+    throw ApiError.unauthorized("Invalid email or password");
   }
 
   // Generate token
@@ -67,7 +67,7 @@ const loginUser = async (email, password) => {
 
   return {
     user: sanitizeUser(user),
-    token
+    token,
   };
 };
 
@@ -80,7 +80,7 @@ const getCurrentUser = async (userId) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    throw ApiError.notFound('User not found');
+    throw ApiError.notFound("User not found");
   }
 
   return sanitizeUser(user);
@@ -99,18 +99,18 @@ const updateUserProfile = async (userId, updateData) => {
   if (email) {
     const existingUser = await User.findOne({ email, _id: { $ne: userId } });
     if (existingUser) {
-      throw ApiError.conflict('Email is already in use');
+      throw ApiError.conflict("Email is already in use");
     }
   }
 
   const user = await User.findByIdAndUpdate(
     userId,
     { firstName, lastName, email },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   if (!user) {
-    throw ApiError.notFound('User not found');
+    throw ApiError.notFound("User not found");
   }
 
   return sanitizeUser(user);
@@ -124,16 +124,16 @@ const updateUserProfile = async (userId, updateData) => {
  * @returns {Promise<void>}
  */
 const changePassword = async (userId, currentPassword, newPassword) => {
-  const user = await User.findById(userId).select('+password');
+  const user = await User.findById(userId).select("+password");
 
   if (!user) {
-    throw ApiError.notFound('User not found');
+    throw ApiError.notFound("User not found");
   }
 
   // Verify current password
   const isMatch = await user.comparePassword(currentPassword);
   if (!isMatch) {
-    throw ApiError.unauthorized('Current password is incorrect');
+    throw ApiError.unauthorized("Current password is incorrect");
   }
 
   // Update password
@@ -146,6 +146,5 @@ module.exports = {
   loginUser,
   getCurrentUser,
   updateUserProfile,
-  changePassword
+  changePassword,
 };
-

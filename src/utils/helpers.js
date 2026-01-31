@@ -2,7 +2,7 @@
  * Utility Helper Functions
  */
 
-const { EDIT_WINDOW_HOURS } = require('../config/constants');
+const { EDIT_WINDOW_HOURS } = require("../config/constants");
 
 /**
  * Check if a transaction is within the editable time window
@@ -25,15 +25,15 @@ const getEditWindowRemaining = (createdAt) => {
   const now = new Date();
   const created = new Date(createdAt);
   const hoursDiff = (now - created) / (1000 * 60 * 60);
-  
+
   if (hoursDiff >= EDIT_WINDOW_HOURS) {
     return null;
   }
-  
+
   const remainingHours = EDIT_WINDOW_HOURS - hoursDiff;
   const hours = Math.floor(remainingHours);
   const minutes = Math.floor((remainingHours - hours) * 60);
-  
+
   return { hours, minutes };
 };
 
@@ -46,14 +46,14 @@ const getEditWindowRemaining = (createdAt) => {
  */
 const buildPagination = (page, limit, total) => {
   const totalPages = Math.ceil(total / limit);
-  
+
   return {
     currentPage: page,
     totalPages,
     totalItems: total,
     itemsPerPage: limit,
     hasNextPage: page < totalPages,
-    hasPrevPage: page > 1
+    hasPrevPage: page > 1,
   };
 };
 
@@ -65,18 +65,18 @@ const buildPagination = (page, limit, total) => {
  */
 const parseDateRange = (startDate, endDate) => {
   const dateFilter = {};
-  
+
   if (startDate) {
     dateFilter.$gte = new Date(startDate);
   }
-  
+
   if (endDate) {
     // Set to end of day
     const end = new Date(endDate);
     end.setHours(23, 59, 59, 999);
     dateFilter.$lte = end;
   }
-  
+
   return Object.keys(dateFilter).length > 0 ? dateFilter : null;
 };
 
@@ -86,10 +86,10 @@ const parseDateRange = (startDate, endDate) => {
  * @param {string} currency - Currency code (default: USD)
  * @returns {string} Formatted currency string
  */
-const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency
+const formatCurrency = (amount, currency = "USD") => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
   }).format(amount);
 };
 
@@ -99,7 +99,9 @@ const formatCurrency = (amount, currency = 'USD') => {
  * @returns {Object} Sanitized user object
  */
 const sanitizeUser = (user) => {
-  const { password, __v, ...sanitized } = user.toObject ? user.toObject() : user;
+  const { password, __v, ...sanitized } = user.toObject
+    ? user.toObject()
+    : user;
   return sanitized;
 };
 
@@ -109,6 +111,5 @@ module.exports = {
   buildPagination,
   parseDateRange,
   formatCurrency,
-  sanitizeUser
+  sanitizeUser,
 };
-

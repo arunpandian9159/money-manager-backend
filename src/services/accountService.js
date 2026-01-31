@@ -3,8 +3,8 @@
  * Business logic for account management
  */
 
-const Account = require('../models/Account');
-const ApiError = require('../utils/ApiError');
+const Account = require("../models/Account");
+const ApiError = require("../utils/ApiError");
 
 /**
  * Create a new account
@@ -15,7 +15,7 @@ const ApiError = require('../utils/ApiError');
 const createAccount = async (userId, accountData) => {
   const account = await Account.create({
     userId,
-    ...accountData
+    ...accountData,
   });
 
   return account;
@@ -32,7 +32,8 @@ const getAccounts = async (userId, queryParams = {}) => {
 
   const filter = { userId };
   if (type) filter.type = type;
-  if (isActive !== undefined) filter.isActive = isActive === 'true' || isActive === true;
+  if (isActive !== undefined)
+    filter.isActive = isActive === "true" || isActive === true;
 
   const accounts = await Account.find(filter).sort({ createdAt: -1 });
 
@@ -48,11 +49,11 @@ const getAccounts = async (userId, queryParams = {}) => {
 const getAccountById = async (userId, accountId) => {
   const account = await Account.findOne({
     _id: accountId,
-    userId
+    userId,
   });
 
   if (!account) {
-    throw ApiError.notFound('Account not found');
+    throw ApiError.notFound("Account not found");
   }
 
   return account;
@@ -69,11 +70,11 @@ const updateAccount = async (userId, accountId, updateData) => {
   const account = await Account.findOneAndUpdate(
     { _id: accountId, userId },
     updateData,
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   if (!account) {
-    throw ApiError.notFound('Account not found');
+    throw ApiError.notFound("Account not found");
   }
 
   return account;
@@ -89,11 +90,11 @@ const deleteAccount = async (userId, accountId) => {
   const account = await Account.findOneAndUpdate(
     { _id: accountId, userId },
     { isActive: false },
-    { new: true }
+    { new: true },
   );
 
   if (!account) {
-    throw ApiError.notFound('Account not found');
+    throw ApiError.notFound("Account not found");
   }
 };
 
@@ -105,46 +106,48 @@ const deleteAccount = async (userId, accountId) => {
  * @param {number} amount - Amount to transfer
  * @returns {Promise<Object>}
  */
-const transferBetweenAccounts = async (userId, fromAccountId, toAccountId, amount) => {
+const transferBetweenAccounts = async (
+  userId,
+  fromAccountId,
+  toAccountId,
+  amount,
+) => {
   if (amount <= 0) {
-    throw ApiError.badRequest('Transfer amount must be positive');
+    throw ApiError.badRequest("Transfer amount must be positive");
   }
 
   if (fromAccountId === toAccountId) {
-    throw ApiError.badRequest('Cannot transfer to the same account');
+    throw ApiError.badRequest("Cannot transfer to the same account");
   }
 
   // Get both accounts
   const [fromAccount, toAccount] = await Promise.all([
     Account.findOne({ _id: fromAccountId, userId, isActive: true }),
-    Account.findOne({ _id: toAccountId, userId, isActive: true })
+    Account.findOne({ _id: toAccountId, userId, isActive: true }),
   ]);
 
   if (!fromAccount) {
-    throw ApiError.notFound('Source account not found');
+    throw ApiError.notFound("Source account not found");
   }
 
   if (!toAccount) {
-    throw ApiError.notFound('Destination account not found');
+    throw ApiError.notFound("Destination account not found");
   }
 
   if (fromAccount.balance < amount) {
-    throw ApiError.badRequest('Insufficient balance in source account');
+    throw ApiError.badRequest("Insufficient balance in source account");
   }
 
   // Perform transfer
   fromAccount.balance -= amount;
   toAccount.balance += amount;
 
-  await Promise.all([
-    fromAccount.save(),
-    toAccount.save()
-  ]);
+  await Promise.all([fromAccount.save(), toAccount.save()]);
 
   return {
     fromAccount,
     toAccount,
-    amount
+    amount,
   };
 };
 
@@ -162,11 +165,11 @@ const getAccountSummary = async (userId) => {
     byType: {
       checking: { count: 0, balance: 0 },
       savings: { count: 0, balance: 0 },
-      credit: { count: 0, balance: 0 }
-    }
+      credit: { count: 0, balance: 0 },
+    },
   };
 
-  accounts.forEach(account => {
+  accounts.forEach((account) => {
     summary.totalBalance += account.balance;
     if (summary.byType[account.type]) {
       summary.byType[account.type].count++;
@@ -184,6 +187,5 @@ module.exports = {
   updateAccount,
   deleteAccount,
   transferBetweenAccounts,
-  getAccountSummary
+  getAccountSummary,
 };
-

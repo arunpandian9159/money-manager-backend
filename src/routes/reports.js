@@ -3,10 +3,10 @@
  * Routes for analytics and reporting
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const reportController = require('../controllers/reportController');
-const { protect } = require('../middleware/auth');
+const reportController = require("../controllers/reportController");
+const { protect } = require("../middleware/auth");
 
 // All routes require authentication
 router.use(protect);
@@ -17,7 +17,7 @@ router.use(protect);
  * @access  Private
  * @query   startDate, endDate, division
  */
-router.get('/summary', reportController.getSummary);
+router.get("/summary", reportController.getSummary);
 
 /**
  * @route   GET /api/reports/by-category
@@ -25,7 +25,7 @@ router.get('/summary', reportController.getSummary);
  * @access  Private
  * @query   startDate, endDate, type (income/expense), division
  */
-router.get('/by-category', reportController.getByCategory);
+router.get("/by-category", reportController.getByCategory);
 
 /**
  * @route   GET /api/reports/by-division
@@ -33,7 +33,7 @@ router.get('/by-category', reportController.getByCategory);
  * @access  Private
  * @query   startDate, endDate, type
  */
-router.get('/by-division', reportController.getByDivision);
+router.get("/by-division", reportController.getByDivision);
 
 /**
  * @route   GET /api/reports/trends
@@ -41,7 +41,6 @@ router.get('/by-division', reportController.getByDivision);
  * @access  Private
  * @query   startDate, endDate, groupBy (day/week/month), division
  */
-router.get('/trends', reportController.getTrends);
+router.get("/trends", reportController.getTrends);
 
 module.exports = router;
-

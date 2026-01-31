@@ -11,9 +11,9 @@ class ApiError extends Error {
    */
   constructor(message, statusCode) {
     super(message);
-    
+
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
 
     Error.captureStackTrace(this, this.constructor);
@@ -24,7 +24,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static badRequest(message = 'Bad Request') {
+  static badRequest(message = "Bad Request") {
     return new ApiError(message, 400);
   }
 
@@ -33,7 +33,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static unauthorized(message = 'Unauthorized') {
+  static unauthorized(message = "Unauthorized") {
     return new ApiError(message, 401);
   }
 
@@ -42,7 +42,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static forbidden(message = 'Forbidden') {
+  static forbidden(message = "Forbidden") {
     return new ApiError(message, 403);
   }
 
@@ -51,7 +51,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static notFound(message = 'Resource not found') {
+  static notFound(message = "Resource not found") {
     return new ApiError(message, 404);
   }
 
@@ -60,7 +60,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static conflict(message = 'Resource already exists') {
+  static conflict(message = "Resource already exists") {
     return new ApiError(message, 409);
   }
 
@@ -69,7 +69,7 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static unprocessable(message = 'Unprocessable Entity') {
+  static unprocessable(message = "Unprocessable Entity") {
     return new ApiError(message, 422);
   }
 
@@ -78,10 +78,9 @@ class ApiError extends Error {
    * @param {string} message - Error message
    * @returns {ApiError}
    */
-  static internal(message = 'Internal Server Error') {
+  static internal(message = "Internal Server Error") {
     return new ApiError(message, 500);
   }
 }
 
 module.exports = ApiError;
-

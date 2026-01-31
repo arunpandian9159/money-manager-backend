@@ -3,8 +3,8 @@
  * Handles authentication HTTP requests
  */
 
-const asyncHandler = require('../utils/asyncHandler');
-const authService = require('../services/authService');
+const asyncHandler = require("../utils/asyncHandler");
+const authService = require("../services/authService");
 
 /**
  * @desc    Register a new user
@@ -18,16 +18,16 @@ const register = asyncHandler(async (req, res) => {
     email,
     firstName,
     lastName,
-    password
+    password,
   });
 
   res.status(201).json({
     success: true,
-    message: 'User registered successfully',
+    message: "User registered successfully",
     data: {
       user,
-      token
-    }
+      token,
+    },
   });
 });
 
@@ -43,11 +43,11 @@ const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Login successful',
+    message: "Login successful",
     data: {
       user,
-      token
-    }
+      token,
+    },
   });
 });
 
@@ -62,8 +62,8 @@ const getMe = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 
@@ -77,7 +77,7 @@ const logout = asyncHandler(async (req, res) => {
   // This endpoint exists for API consistency and potential future token blacklisting
   res.status(200).json({
     success: true,
-    message: 'Logged out successfully'
+    message: "Logged out successfully",
   });
 });
 
@@ -92,15 +92,15 @@ const updateProfile = asyncHandler(async (req, res) => {
   const user = await authService.updateUserProfile(req.user._id, {
     firstName,
     lastName,
-    email
+    email,
   });
 
   res.status(200).json({
     success: true,
-    message: 'Profile updated successfully',
+    message: "Profile updated successfully",
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 
@@ -116,7 +116,7 @@ const changePassword = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Password changed successfully'
+    message: "Password changed successfully",
   });
 });
 
@@ -126,6 +126,5 @@ module.exports = {
   getMe,
   logout,
   updateProfile,
-  changePassword
+  changePassword,
 };
-

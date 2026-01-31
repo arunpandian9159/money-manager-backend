@@ -3,8 +3,8 @@
  * Handles analytics and reporting HTTP requests
  */
 
-const asyncHandler = require('../utils/asyncHandler');
-const reportService = require('../services/reportService');
+const asyncHandler = require("../utils/asyncHandler");
+const reportService = require("../services/reportService");
 
 /**
  * @desc    Get summary report
@@ -15,14 +15,14 @@ const reportService = require('../services/reportService');
 const getSummary = asyncHandler(async (req, res) => {
   const summary = await reportService.getSummaryReport(
     req.user._id.toString(),
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      summary
-    }
+      summary,
+    },
   });
 });
 
@@ -35,14 +35,14 @@ const getSummary = asyncHandler(async (req, res) => {
 const getByCategory = asyncHandler(async (req, res) => {
   const breakdown = await reportService.getCategoryBreakdown(
     req.user._id.toString(),
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      breakdown
-    }
+      breakdown,
+    },
   });
 });
 
@@ -55,14 +55,14 @@ const getByCategory = asyncHandler(async (req, res) => {
 const getByDivision = asyncHandler(async (req, res) => {
   const breakdown = await reportService.getDivisionBreakdown(
     req.user._id.toString(),
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      breakdown
-    }
+      breakdown,
+    },
   });
 });
 
@@ -75,14 +75,14 @@ const getByDivision = asyncHandler(async (req, res) => {
 const getTrends = asyncHandler(async (req, res) => {
   const trends = await reportService.getTrends(
     req.user._id.toString(),
-    req.query
+    req.query,
   );
 
   res.status(200).json({
     success: true,
     data: {
-      trends
-    }
+      trends,
+    },
   });
 });
 
@@ -90,6 +90,5 @@ module.exports = {
   getSummary,
   getByCategory,
   getByDivision,
-  getTrends
+  getTrends,
 };
-
