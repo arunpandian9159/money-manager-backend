@@ -64,7 +64,7 @@ const JWT_CONFIG = {
 const RATE_LIMIT = {
   WINDOW_MS:
     (parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES) || 15) * 60 * 1000,
-  MAX_ATTEMPTS: parseInt(process.env.RATE_LIMIT_MAX) || 5,
+  MAX_ATTEMPTS: parseInt(process.env.RATE_LIMIT_MAX) || 100,
 };
 
 /**

@@ -86,7 +86,7 @@ const getCategoryBreakdown = async (userId, queryParams) => {
   const grandTotal = breakdown.reduce((sum, cat) => sum + cat.total, 0);
 
   return breakdown.map((cat) => ({
-    category: cat._id,
+    _id: cat._id,
     total: cat.total,
     count: cat.count,
     avgAmount: cat.avgAmount,
@@ -138,7 +138,21 @@ const getDivisionBreakdown = async (userId, queryParams) => {
   result.office.net = result.office.income - result.office.expense;
   result.personal.net = result.personal.income - result.personal.expense;
 
-  return result;
+  // Convert to array format for charts
+  return [
+    {
+      _id: "Office",
+      income: result.office.income,
+      expense: result.office.expense,
+      net: result.office.net,
+    },
+    {
+      _id: "Personal",
+      income: result.personal.income,
+      expense: result.personal.expense,
+      net: result.personal.net,
+    },
+  ];
 };
 
 /**
