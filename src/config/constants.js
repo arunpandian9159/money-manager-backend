@@ -62,9 +62,15 @@ const JWT_CONFIG = {
  * Rate limiting configuration
  */
 const RATE_LIMIT = {
+  // shared window
   WINDOW_MS:
-    (parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES) || 15) * 60 * 1000,
-  MAX_ATTEMPTS: parseInt(process.env.RATE_LIMIT_MAX) || 100,
+    (parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES, 10) || 15) * 60 * 1000,
+
+  // auth-specific rate limit
+  MAX_ATTEMPTS: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
+
+  // general API rate limit (separate from auth)
+  API_MAX: parseInt(process.env.RATE_LIMIT_API_MAX, 10) || 1000,
 };
 
 /**
