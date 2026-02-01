@@ -11,8 +11,8 @@ const { RATE_LIMIT } = require("../config/constants");
  * Limits requests to 100 per 15 minutes
  */
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // 100 requests per window
+  windowMs: RATE_LIMIT.WINDOW_MS,
+  max: RATE_LIMIT.API_MAX,
   message: {
     success: false,
     message: "Too many requests, please try again later",
