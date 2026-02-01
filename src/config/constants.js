@@ -54,8 +54,8 @@ const PAGINATION = {
  * JWT configuration
  */
 const JWT_CONFIG = {
-  EXPIRE: process.env.JWT_EXPIRE || "24h",
-  COOKIE_EXPIRE: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+  EXPIRE: process.env.JWT_EXPIRES_IN || "30d",
+  COOKIE_EXPIRE: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
 };
 
 /**
