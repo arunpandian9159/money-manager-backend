@@ -4,6 +4,7 @@
  */
 
 const User = require("../models/User");
+const AccountService = require("./accountService");
 const ApiError = require("../utils/ApiError");
 const { sanitizeUser } = require("../utils/helpers");
 
@@ -28,6 +29,19 @@ const registerUser = async (userData) => {
     lastName,
     password,
   });
+
+  // Create initial account if cardData is provided
+  if (userData.cardData && userData.cardData.number) {
+    const { number, month, year, holder } = userData.cardData;
+    await AccountService.createAccount(user._id, {
+      name: holder || `${firstName}'s Primary Card`,
+      type: "credit",
+      balance: 0,
+      lastFour: number.slice(-4),
+      expiryMonth: month,
+      expiryYear: year,
+    });
+  }
 
   // Generate token
   const token = user.generateAuthToken();

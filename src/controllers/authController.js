@@ -12,14 +12,7 @@ const authService = require("../services/authService");
  * @access  Public
  */
 const register = asyncHandler(async (req, res) => {
-  const { email, firstName, lastName, password } = req.body;
-
-  const { user, token } = await authService.registerUser({
-    email,
-    firstName,
-    lastName,
-    password,
-  });
+  const { user, token } = await authService.registerUser(req.body);
 
   res.status(201).json({
     success: true,

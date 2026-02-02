@@ -38,6 +38,14 @@ const accountSchema = new mongoose.Schema(
       match: [/^\d{0,4}$/, "Last four must be numeric"],
       default: null,
     },
+    expiryMonth: {
+      type: String,
+      default: null,
+    },
+    expiryYear: {
+      type: String,
+      default: null,
+    },
     color: {
       type: String,
       default: "#1d69ed", // Primary blue
