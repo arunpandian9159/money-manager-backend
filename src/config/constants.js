@@ -33,7 +33,7 @@ const CATEGORIES = [
 /**
  * Account types
  */
-const ACCOUNT_TYPES = ["checking", "savings", "credit"];
+const ACCOUNT_TYPES = ["checking", "savings", "credit", "current"];
 
 /**
  * Edit window in hours

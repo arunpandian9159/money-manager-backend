@@ -148,6 +148,14 @@ const accountValidation = {
       .optional()
       .matches(/^\d{0,4}$/)
       .withMessage("Last four must be up to 4 digits"),
+    body("expiryMonth")
+      .optional()
+      .isString()
+      .withMessage("Expiry month must be a string"),
+    body("expiryYear")
+      .optional()
+      .isString()
+      .withMessage("Expiry year must be a string"),
     handleValidationErrors,
   ],
   update: [
